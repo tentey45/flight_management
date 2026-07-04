@@ -32,7 +32,7 @@ class AuthController extends Controller
         // Automatically log the user in after they register
         Auth::login($user);
 
-        return redirect()->route('posts.index')->with('success', 'Registration successful! Welcome to the blog.');
+        return redirect()->route('home')->with('success', 'Registration successful! Welcome to Flight Management.');
     }
 
     // --- LOGIN ---
@@ -54,8 +54,8 @@ class AuthController extends Controller
             // Regenerate session to prevent Session Fixation attacks
             $request->session()->regenerate();
 
-            // Redirect to intended page (or fallback to posts)
-            return redirect()->intended(route('posts.index'))->with('success', 'Welcome back!');
+            // Redirect to intended page (or fallback to home)
+            return redirect()->intended(route('home'))->with('success', 'Welcome back!');
         }
 
         // If authentication fails
@@ -74,6 +74,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('posts.index')->with('success', 'You have been successfully logged out.');
+        return redirect()->route('home')->with('success', 'You have been successfully logged out.');
     }
 }
