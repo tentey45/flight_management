@@ -7,3 +7,483 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+/* Custom Premium Vanilla CSS Overrides */
+:root {
+    --bg-dark: #0a0c16;
+    --card-bg: rgba(20, 24, 46, 0.45);
+    --card-border: rgba(255, 255, 255, 0.08);
+    --card-border-focus: rgba(0, 198, 251, 0.4);
+    --text-primary: #f8fafc;
+    --text-muted: #94a3b8;
+    --primary-glow: #00c6fb;
+    --secondary-glow: #005bea;
+    --success-glow: #00f2fe;
+    
+    /* Status colors */
+    --status-booking: #ffb800;
+    --status-confirmed: #00c6fb;
+    --status-onboard: #a855f7;
+    --status-arrived: #10b981;
+    --status-completed: #64748b;
+}
+
+body.dark-theme {
+    background-color: var(--bg-dark);
+    font-family: 'Instrument Sans', sans-serif;
+    color: var(--text-primary);
+    overflow-x: hidden;
+    position: relative;
+    min-height: 100vh;
+}
+
+.font-heading {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+/* Glowing Orbs */
+.glow-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(140px);
+    z-index: -1;
+    opacity: 0.25;
+    pointer-events: none;
+}
+.orb-1 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, var(--primary-glow) 0%, transparent 80%);
+    top: 5%;
+    right: 10%;
+}
+.orb-2 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, var(--secondary-glow) 0%, transparent 80%);
+    bottom: 10%;
+    left: 5%;
+}
+.orb-3 {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, var(--status-onboard) 0%, transparent 80%);
+    top: 45%;
+    left: 45%;
+}
+
+/* Glassmorphism Navigation */
+.navbar-glass {
+    background: rgba(10, 12, 22, 0.7) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+.logo-icon {
+    font-size: 1.5rem;
+    color: var(--primary-glow);
+    text-shadow: 0 0 10px rgba(0, 198, 251, 0.5);
+}
+.logo-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, #ffffff 30%, #a5b4fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.user-avatar-mini {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-glow), var(--secondary-glow));
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: white;
+}
+
+/* Glass Card */
+.glass-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.glass-card:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* Form Controls Styling */
+.form-control, .form-select {
+    background-color: rgba(15, 18, 36, 0.6) !important;
+    border: 1px solid var(--card-border) !important;
+    color: var(--text-primary) !important;
+    border-radius: 8px !important;
+    padding: 0.625rem 1rem !important;
+    transition: all 0.25s ease !important;
+}
+.form-control:focus, .form-select:focus {
+    background-color: rgba(15, 18, 36, 0.8) !important;
+    border-color: var(--card-border-focus) !important;
+    box-shadow: 0 0 12px rgba(0, 198, 251, 0.25) !important;
+    outline: none !important;
+}
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.25);
+}
+
+/* Premium Buttons */
+.btn-glow {
+    background: linear-gradient(135deg, var(--primary-glow) 0%, var(--secondary-glow) 100%);
+    border: none;
+    color: white;
+    font-weight: 600;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 198, 251, 0.3);
+    transition: all 0.3s ease;
+}
+.btn-glow:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 198, 251, 0.5);
+    background: linear-gradient(135deg, #02d4ff 0%, #006aff 100%);
+    color: white;
+}
+.btn-glow:active {
+    transform: translateY(0);
+}
+
+.btn-glow-blue {
+    background: rgba(0, 198, 251, 0.1);
+    border: 1px solid rgba(0, 198, 251, 0.3);
+    color: var(--primary-glow);
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.25s ease;
+}
+.btn-glow-blue:hover {
+    background: var(--primary-glow);
+    color: var(--bg-dark);
+    box-shadow: 0 0 10px rgba(0, 198, 251, 0.4);
+}
+
+.text-link {
+    color: var(--primary-glow);
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+.text-link:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+}
+
+/* Glowing text effects */
+.text-glow {
+    text-shadow: 0 0 15px rgba(0, 198, 251, 0.35);
+}
+.text-glow-success {
+    text-shadow: 0 0 15px rgba(16, 185, 129, 0.35);
+}
+
+/* Custom Status Badges */
+.badge-status {
+    padding: 0.35em 0.8em;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 50px;
+    display: inline-flex;
+    align-items: center;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+.status-booking {
+    background: rgba(255, 184, 0, 0.1);
+    color: var(--status-booking);
+    border: 1px solid rgba(255, 184, 0, 0.25);
+    box-shadow: 0 0 10px rgba(255, 184, 0, 0.15);
+}
+.status-confirmed {
+    background: rgba(0, 198, 251, 0.1);
+    color: var(--status-confirmed);
+    border: 1px solid rgba(0, 198, 251, 0.25);
+    box-shadow: 0 0 10px rgba(0, 198, 251, 0.15);
+}
+.status-onboard {
+    background: rgba(168, 85, 247, 0.1);
+    color: var(--status-onboard);
+    border: 1px solid rgba(168, 85, 247, 0.25);
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.15);
+}
+.status-arrived {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--status-arrived);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.15);
+}
+.status-completed {
+    background: rgba(100, 116, 139, 0.1);
+    color: var(--status-completed);
+    border: 1px solid rgba(100, 116, 139, 0.25);
+}
+
+/* User Badges */
+.badge-admin {
+    background: rgba(244, 63, 94, 0.15);
+    color: #f43f5e;
+    border: 1px solid rgba(244, 63, 94, 0.3);
+    padding: 0.4em 0.8em;
+    border-radius: 50px;
+    font-size: 0.75rem;
+}
+.badge-customer {
+    background: rgba(99, 102, 241, 0.15);
+    color: #6366f1;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    padding: 0.4em 0.8em;
+    border-radius: 50px;
+    font-size: 0.75rem;
+}
+
+/* Profile styling */
+.avatar-glow {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 auto;
+    background: linear-gradient(135deg, var(--primary-glow) 0%, var(--secondary-glow) 100%);
+    box-shadow: 0 0 25px rgba(0, 198, 251, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.avatar-initial {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: white;
+}
+
+/* Boarding Pass Ticket Card styling */
+.ticket-card {
+    display: flex;
+    background: var(--card-bg);
+    border-radius: 20px;
+    border: 1px solid var(--card-border);
+    overflow: hidden;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+.ticket-main {
+    flex: 3;
+}
+.ticket-stub {
+    flex: 1;
+    background: rgba(15, 18, 36, 0.3);
+}
+.border-dashed {
+    border-style: dashed !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Flight route styling */
+.airport-code {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.8rem;
+    letter-spacing: -0.03em;
+    background: linear-gradient(180deg, #ffffff 40%, #a5b4fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.airport-name {
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+}
+.flight-time {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+.flight-date {
+    font-size: 0.75rem;
+}
+
+.plane-line {
+    position: relative;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.12);
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+.plane-mini {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(90deg);
+    color: var(--primary-glow);
+    font-size: 1.1rem;
+    text-shadow: 0 0 8px rgba(0, 198, 251, 0.6);
+}
+.duration-badge {
+    font-size: 0.7rem;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 0.2rem 0.6rem;
+    border-radius: 50px;
+    border: 1px solid rgba(255,255,255,0.06);
+}
+
+.detail-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    margin-bottom: 0.15rem;
+}
+.detail-value {
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.flight-tag {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+    padding: 0.3rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+}
+.flight-icon {
+    color: var(--primary-glow);
+    margin-right: 0.25rem;
+}
+
+.stub-logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    color: var(--primary-glow);
+}
+.ticket-number-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+.ticket-number-code {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+}
+
+.barcode {
+    display: inline-flex;
+    height: 40px;
+    width: 80%;
+    margin: 0 auto;
+    overflow: hidden;
+}
+.barcode span {
+    display: inline-block;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.35);
+    margin-right: 2px;
+}
+/* Generate random looking bar thicknesses */
+.barcode span:nth-child(even) {
+    width: 1px;
+}
+.barcode span:nth-child(odd) {
+    width: 3px;
+}
+.barcode span:nth-child(3n) {
+    width: 4px;
+}
+.barcode span:nth-child(4n) {
+    width: 2px;
+}
+.barcode-text {
+    font-size: 0.6rem;
+    margin-top: 0.25rem;
+    letter-spacing: 0.1em;
+}
+
+/* Glassmorphism dropdowns */
+.dropdown-glass {
+    background: rgba(15, 18, 36, 0.85) !important;
+    backdrop-filter: blur(15px) !important;
+    border: 1px solid var(--card-border) !important;
+    border-radius: 12px !important;
+    padding: 0.5rem !important;
+}
+.dropdown-glass .dropdown-item {
+    border-radius: 6px !important;
+    padding: 0.5rem 1rem !important;
+    transition: all 0.2s ease !important;
+}
+.dropdown-glass .dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.06) !important;
+    color: white !important;
+}
+
+/* Glass alerts */
+.alert-glass {
+    background: rgba(15, 18, 36, 0.5) !important;
+    backdrop-filter: blur(12px) !important;
+    border-radius: 12px !important;
+    color: white !important;
+    border: 1px solid var(--card-border) !important;
+}
+.alert-glass.alert-success {
+    border-left: 4px solid var(--status-arrived) !important;
+}
+.alert-glass.alert-danger {
+    border-left: 4px solid #f43f5e !important;
+}
+.alert-icon {
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+/* Tables custom styling */
+.table-glass {
+    border-collapse: separate !important;
+    border-spacing: 0 8px !important;
+}
+.table-glass tbody tr {
+    background: rgba(255, 255, 255, 0.01) !important;
+    transition: all 0.2s ease;
+}
+.table-glass tbody tr:hover {
+    background: rgba(255, 255, 255, 0.03) !important;
+}
+.table-glass th, .table-glass td {
+    padding: 1rem !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+.table-glass th {
+    font-family: 'Space Grotesk', sans-serif;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    color: var(--text-muted) !important;
+}
+
+@media (max-width: 768px) {
+    .ticket-card {
+        flex-direction: column;
+    }
+    .ticket-stub {
+        border-top: 1px dashed rgba(255, 255, 255, 0.15) !important;
+        border-start: none !important;
+    }
+    .barcode {
+        width: 50%;
+    }
+}
