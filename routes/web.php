@@ -23,6 +23,11 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 
 // Book Flight & Profile (Protected by Auth)
 Route::middleware('auth')->group(function () {
+    // Step 1b: Class & seat selection page
+    Route::get('/flights/{flight}/select', [FlightController::class, 'showSelect'])->name('flights.select');
+    // Step 2: Confirm page (receives class & seat as GET params)
+    Route::get('/flights/{flight}/confirm', [FlightController::class, 'showConfirm'])->name('flights.confirm');
+    // Step 3: Actually create the booking
     Route::post('/flights/{flight}/book', [FlightController::class, 'book'])->name('flights.book');
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 });

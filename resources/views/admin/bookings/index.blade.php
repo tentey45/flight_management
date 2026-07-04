@@ -1,71 +1,76 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="text-white mb-0 font-heading">Manage Customer Bookings</h2>
-    </div>
 
-    <div class="glass-card p-4">
-        @if($bookings->isEmpty())
-            <div class="text-center py-5">
-                <p class="text-muted mb-0">No bookings have been made by customers yet.</p>
-            </div>
-        @else
-            <div class="table-responsive">
-                <table class="table table-dark table-hover table-glass align-middle mb-0">
-                    <thead>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0">Manage Bookings & Trip Status</h4>
+    <span class="badge bg-secondary fs-6">{{ $bookings->count() }} total</span>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Ticket #</th>
+                        <th>Passenger</th>
+                        <th>Flight</th>
+                        <th>Class & Seat</th>
+                        <th>Route</th>
+                        <th>Departure</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($bookings as $booking)
                         <tr>
-                            <th>Ticket No.</th>
-                            <th>Passenger</th>
-                            <th>Flight</th>
-                            <th>Route</th>
-                            <th>Status</th>
-                            <th class="text-end">Update Status</th>
+                            <td>
+                                <code style="font-size:0.8rem;">{{ $booking->ticket_number }}</code>
+                            </td>
+                            <td>
+                                <div style="font-weight:600;">{{ $booking->user->name }}</div>
+                                <div class="text-muted" style="font-size:0.8rem;">{{ $booking->user->email }}</div>
+                            </td>
+                            <td><span class="badge bg-primary">{{ $booking->flight->flight_number }}</span></td>
+                            <td>
+                                <div class="fw-semibold" style="font-size:0.85rem;">{{ $booking->class }}</div>
+                                <div class="text-success small fw-bold">Seat {{ $booking->seat_number ?? '—' }}</div>
+                            </td>
+                            <td>
+                                <span style="font-size:0.85rem;">
+                                    {{ $booking->flight->departure_location }}
+                                    → {{ $booking->flight->destination }}
+                                </span>
+                            </td>
+                            <td style="font-size:0.85rem;">{{ $booking->flight->departure_time->format('M d, Y H:i') }}</td>
+                            <td>
+                                <span class="status-badge status-{{ strtolower($booking->status) }}">
+                                    {{ $booking->status }}
+                                </span>
+                            </td>
+                            <td>
+                                <form action="{{ route('admin.bookings.update-status', $booking->id) }}" method="POST" class="d-flex gap-1">
+                                    @csrf @method('PATCH')
+                                    <select name="status" class="form-select form-select-sm" style="width:120px;">
+                                        @foreach(['Booking','Confirmed','Onboard','Arrived','Completed'] as $st)
+                                            <option value="{{ $st }}" {{ $booking->status === $st ? 'selected' : '' }}>{{ $st }}</option>
+                                        @endforeach
+                                    </select>
+                                    <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                                </form>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($bookings as $booking)
-                            <tr>
-                                <td class="fw-bold text-white">
-                                    <span class="text-glow font-monospace">{{ $booking->ticket_number }}</span>
-                                </td>
-                                <td>
-                                    <div class="fw-bold text-white">{{ $booking->user->name }}</div>
-                                    <small class="text-muted">{{ $booking->user->email }}</small>
-                                </td>
-                                <td>
-                                    <span class="flight-tag py-1 px-2 rounded-2">✈ {{ $booking->flight->flight_number }}</span>
-                                </td>
-                                <td>
-                                    <div>From: <strong class="text-white">{{ $booking->flight->departure_location }}</strong></div>
-                                    <div>To: <strong class="text-white">{{ $booking->flight->destination }}</strong></div>
-                                </td>
-                                <td>
-                                    <span class="badge-status status-{{ strtolower($booking->status) }}">
-                                        {{ $booking->status }}
-                                    </span>
-                                </td>
-                                <td class="text-end">
-                                    <form action="{{ route('admin.bookings.update-status', $booking->id) }}" method="POST" class="d-inline-flex align-items-center justify-content-end">
-                                        @csrf
-                                        @method('PATCH')
-                                        <select name="status" class="form-select form-select-sm bg-dark text-white border-secondary me-2 w-auto">
-                                            <option value="Booking" {{ $booking->status == 'Booking' ? 'selected' : '' }}>Booking</option>
-                                            <option value="Confirmed" {{ $booking->status == 'Confirmed' ? 'selected' : '' }}>Confirmed</option>
-                                            <option value="Onboard" {{ $booking->status == 'Onboard' ? 'selected' : '' }}>Onboard</option>
-                                            <option value="Arrived" {{ $booking->status == 'Arrived' ? 'selected' : '' }}>Arrived</option>
-                                            <option value="Completed" {{ $booking->status == 'Completed' ? 'selected' : '' }}>Completed</option>
-                                        </select>
-                                        <button type="submit" class="btn btn-sm btn-glow-blue">Update</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        @endif
+                    @empty
+                        <tr>
+                            <td colspan="8" class="text-center text-muted py-4">No bookings yet.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
+
 @endsection

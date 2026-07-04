@@ -12,46 +12,76 @@ use Carbon\Carbon;
 class FlightController extends Controller
 {
     /**
-     * Show search page and search results.
+     * Show search page and search results (homepage).
      */
     public function search(Request $request)
     {
-        $departure = $request->input('departure');
+        $departure   = $request->input('departure');
         $destination = $request->input('destination');
-        $date = $request->input('date');
+        $date        = $request->input('date');
 
         $query = Flight::query();
 
         if ($departure) {
             $query->where('departure_location', 'like', '%' . $departure . '%');
         }
-
         if ($destination) {
             $query->where('destination', 'like', '%' . $destination . '%');
         }
-
         if ($date) {
             $query->whereDate('departure_time', Carbon::parse($date)->toDateString());
         }
 
-        // Get matching flights
-        $flights = $query->orderBy('departure_time', 'asc')->get();
-
-        // Get unique departures and destinations for quick filters
-        $allDepartures = Flight::select('departure_location')->distinct()->pluck('departure_location');
+        $flights         = $query->orderBy('departure_time', 'asc')->get();
+        $allDepartures   = Flight::select('departure_location')->distinct()->pluck('departure_location');
         $allDestinations = Flight::select('destination')->distinct()->pluck('destination');
 
         return view('flights.search', compact('flights', 'departure', 'destination', 'date', 'allDepartures', 'allDestinations'));
     }
 
     /**
-     * Store a new booking for a flight.
+     * Step 1b — Show class & seat selection page.
+     */
+    public function showSelect(Flight $flight)
+    {
+        // Already-taken seats for this flight
+        $takenSeats = Booking::where('flight_id', $flight->id)
+            ->whereNotNull('seat_number')
+            ->pluck('seat_number')
+            ->toArray();
+
+        return view('flights.select', compact('flight', 'takenSeats'));
+    }
+
+    /**
+     * Step 2 — Show booking confirmation page.
+     * Receives class & seat as query-string params from the select form.
+     */
+    public function showConfirm(Request $request, Flight $flight)
+    {
+        $request->validate([
+            'class'       => 'required|in:Economy,Business,First',
+            'seat_number' => 'nullable|string|max:5',
+        ]);
+
+        $selectedClass = $request->input('class');
+        $seatNumber    = $request->input('seat_number');
+
+        $prices = ['Economy' => 299, 'Business' => 599, 'First' => 999];
+        $price  = $prices[$selectedClass];
+
+        return view('flights.confirm', compact('flight', 'selectedClass', 'seatNumber', 'price'));
+    }
+
+    /**
+     * Step 3 — Create the booking in the database.
      */
     public function book(Request $request, Flight $flight)
     {
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Please log in to book a flight.');
-        }
+        $request->validate([
+            'class'       => 'required|in:Economy,Business,First',
+            'seat_number' => 'nullable|string|max:5',
+        ]);
 
         $user = Auth::user();
 
@@ -60,14 +90,16 @@ class FlightController extends Controller
             $ticketNumber = 'FL-' . Carbon::now()->format('Ymd') . '-' . strtoupper(Str::random(6));
         } while (Booking::where('ticket_number', $ticketNumber)->exists());
 
-        // Create booking
         Booking::create([
-            'user_id' => $user->id,
-            'flight_id' => $flight->id,
-            'ticket_number' => $ticketNumber,
-            'status' => 'Booking',
+            'user_id'      => $user->id,
+            'flight_id'    => $flight->id,
+            'ticket_number'=> $ticketNumber,
+            'status'       => 'Booking',
+            'class'        => $request->input('class'),
+            'seat_number'  => $request->input('seat_number'),
         ]);
 
-        return redirect()->route('profile')->with('success', 'Flight booked successfully! Your ticket number is ' . $ticketNumber);
+        return redirect()->route('profile')
+            ->with('success', 'Booking confirmed! 🎉 Your ticket number is ' . $ticketNumber);
     }
 }

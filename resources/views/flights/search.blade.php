@@ -1,118 +1,122 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="hero-section text-center py-5 mb-5">
-    <h1 class="display-4 text-white fw-bold font-heading text-glow mb-2">Find Your Next Destination</h1>
-    <p class="text-muted lead">Search and book flights across global destinations instantly.</p>
-</div>
 
-<div class="row justify-content-center">
-    <div class="col-md-11">
-        <!-- Search Card -->
-        <div class="glass-card p-4 mb-5">
-            <form action="{{ route('home') }}" method="GET">
-                <div class="row g-3 align-items-end">
-                    <div class="col-md-3">
-                        <label class="form-label text-muted">From</label>
-                        <input type="text" name="departure" class="form-control" list="departures" value="{{ $departure }}" placeholder="Departure City or Airport">
-                        <datalist id="departures">
-                            @foreach($allDepartures as $dep)
-                                <option value="{{ $dep }}">
-                            @endforeach
-                        </datalist>
-                    </div>
-                    
-                    <div class="col-md-3">
-                        <label class="form-label text-muted">To</label>
-                        <input type="text" name="destination" class="form-control" list="destinations" value="{{ $destination }}" placeholder="Destination City or Airport">
-                        <datalist id="destinations">
-                            @foreach($allDestinations as $dest)
-                                <option value="{{ $dest }}">
-                            @endforeach
-                        </datalist>
-                    </div>
-
-                    <div class="col-md-3">
-                        <label class="form-label text-muted">Departure Date</label>
-                        <input type="date" name="date" class="form-control" value="{{ $date }}">
-                    </div>
-
-                    <div class="col-md-3">
-                        <button type="submit" class="btn btn-glow w-100 py-2">Search Flights</button>
-                    </div>
+<!-- Hero search bar -->
+<div class="card mb-4">
+    <div class="card-header-blue">
+        ✈ Search Available Flights
+    </div>
+    <div class="card-body p-4">
+        <form action="{{ route('home') }}" method="GET">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label">From (Departure)</label>
+                    <input type="text" name="departure" class="form-control" value="{{ $departure }}" list="dep-list" placeholder="e.g. Tokyo, London">
+                    <datalist id="dep-list">
+                        @foreach($allDepartures as $d)
+                            <option value="{{ $d }}">
+                        @endforeach
+                    </datalist>
                 </div>
-            </form>
-        </div>
-
-        <!-- Flights List -->
-        <h3 class="text-white mb-4">Available Flights</h3>
-
-        @if($flights->isEmpty())
-            <div class="glass-card p-5 text-center">
-                <h5 class="text-white">No flights found</h5>
-                <p class="text-muted">Try adjusting your locations or search terms.</p>
-                <a href="{{ route('home') }}" class="btn btn-sm btn-outline-light">Reset Search</a>
+                <div class="col-md-3">
+                    <label class="form-label">To (Destination)</label>
+                    <input type="text" name="destination" class="form-control" value="{{ $destination }}" list="dst-list" placeholder="e.g. Paris, New York">
+                    <datalist id="dst-list">
+                        @foreach($allDestinations as $d)
+                            <option value="{{ $d }}">
+                        @endforeach
+                    </datalist>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Departure Date</label>
+                    <input type="date" name="date" class="form-control" value="{{ $date }}">
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary w-100">Search Flights</button>
+                </div>
             </div>
-        @else
-            <div class="row">
-                @foreach($flights as $flight)
-                    <div class="col-md-6 mb-4">
-                        <div class="flight-search-card glass-card p-4 h-100 d-flex flex-column justify-content-between">
-                            <div>
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <span class="flight-tag py-1 px-2 rounded-2">✈ {{ $flight->flight_number }}</span>
-                                    <span class="text-muted small">Daily Flight</span>
-                                </div>
-
-                                <div class="d-flex justify-content-between align-items-center my-4">
-                                    <div class="route-point">
-                                        @php
-                                            preg_match('/\((.*?)\)/', $flight->departure_location, $depCode);
-                                            $depAirportCode = isset($depCode[1]) ? $depCode[1] : 'DEP';
-                                            $depName = trim(preg_replace('/\s*\(.*?\)\s*/', '', $flight->departure_location));
-
-                                            preg_match('/\((.*?)\)/', $flight->destination, $dstCode);
-                                            $dstAirportCode = isset($dstCode[1]) ? $dstCode[1] : 'DST';
-                                            $dstName = trim(preg_replace('/\s*\(.*?\)\s*/', '', $flight->destination));
-                                        @endphp
-                                        <div class="airport-code fs-4">{{ $depAirportCode }}</div>
-                                        <div class="airport-name text-muted">{{ $depName }}</div>
-                                        <div class="flight-time text-white">{{ $flight->departure_time->format('H:i') }}</div>
-                                        <div class="flight-date text-muted small">{{ $flight->departure_time->format('D, M d') }}</div>
-                                    </div>
-                                    
-                                    <div class="route-connector text-center flex-grow-1 mx-3">
-                                        <div class="plane-line">
-                                            <span class="plane-mini">✈</span>
-                                        </div>
-                                        <span class="duration-badge text-muted">Direct</span>
-                                    </div>
-                                    
-                                    <div class="route-point text-end">
-                                        <div class="airport-code fs-4">{{ $dstAirportCode }}</div>
-                                        <div class="airport-name text-muted">{{ $dstName }}</div>
-                                        <div class="flight-time text-white">{{ $flight->arrival_time->format('H:i') }}</div>
-                                        <div class="flight-date text-muted small">{{ $flight->arrival_time->format('D, M d') }}</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="pt-3 border-top border-secondary d-flex justify-content-between align-items-center mt-3">
-                                <div>
-                                    <small class="text-muted d-block">Price (One-Way)</small>
-                                    <span class="fs-5 text-white fw-bold">$299.00</span>
-                                </div>
-                                
-                                <form action="{{ route('flights.book', $flight->id) }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="btn btn-glow btn-sm px-4">Book Now</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        @endif
+        </form>
     </div>
 </div>
+
+<!-- Results -->
+<h5 class="mb-3 text-muted">
+    @if($departure || $destination || $date)
+        Search Results — {{ $flights->count() }} flight(s) found
+    @else
+        All Available Flights ({{ $flights->count() }})
+    @endif
+</h5>
+
+@if($flights->isEmpty())
+    <div class="card text-center p-5">
+        <div class="text-muted mb-2" style="font-size:2.5rem;">🔍</div>
+        <h5>No flights found</h5>
+        <p class="text-muted">Try different departure, destination, or date.</p>
+        <a href="{{ route('home') }}" class="btn btn-outline-secondary btn-sm mx-auto" style="width:fit-content">Clear Search</a>
+    </div>
+@else
+    <div class="row g-3">
+        @foreach($flights as $flight)
+            @php
+                preg_match('/\((.*?)\)/', $flight->departure_location, $dCode);
+                preg_match('/\((.*?)\)/', $flight->destination, $aCode);
+                $depCode = $dCode[1] ?? 'DEP';
+                $arrCode = $aCode[1] ?? 'ARR';
+                $depCity = trim(preg_replace('/\s*\(.*?\)/', '', $flight->departure_location));
+                $arrCity = trim(preg_replace('/\s*\(.*?\)/', '', $flight->destination));
+            @endphp
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body p-4">
+                        <!-- Header row -->
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-primary" style="font-size:0.85rem; padding:0.4rem 0.8rem;">
+                                ✈ {{ $flight->flight_number }}
+                            </span>
+                            <span class="text-muted small">Direct Flight</span>
+                        </div>
+
+                        <!-- Route row -->
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <div class="text-center">
+                                <div class="airport-code">{{ $depCode }}</div>
+                                <div class="airport-name">{{ $depCity }}</div>
+                                <div class="flight-time-val">{{ $flight->departure_time->format('H:i') }}</div>
+                                <div class="text-muted" style="font-size:0.75rem;">{{ $flight->departure_time->format('D, M d') }}</div>
+                            </div>
+                            <div class="route-arrow flex-grow-1 mx-2">
+                                <div class="text-center">→</div>
+                                <div class="text-center text-muted" style="font-size:0.72rem;">Direct</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="airport-code">{{ $arrCode }}</div>
+                                <div class="airport-name">{{ $arrCity }}</div>
+                                <div class="flight-time-val">{{ $flight->arrival_time->format('H:i') }}</div>
+                                <div class="text-muted" style="font-size:0.75rem;">{{ $flight->arrival_time->format('D, M d') }}</div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                            <div>
+                                <div class="text-muted" style="font-size:0.75rem;">ONE-WAY FARE FROM</div>
+                                <div class="fw-bold text-primary" style="font-size:1.1rem;">$299.00</div>
+                            </div>
+                            @auth
+                                <a href="{{ route('flights.select', $flight->id) }}" class="btn btn-primary px-4">
+                                    Select Flight →
+                                </a>
+                            @endauth
+                            @guest
+                                <a href="{{ route('login') }}" class="btn btn-outline-primary px-4">Login to Book</a>
+                            @endguest
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    </div>
+@endif
+
 @endsection

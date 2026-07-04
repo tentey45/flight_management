@@ -14,6 +14,8 @@ class Booking extends Model
         'flight_id',
         'ticket_number',
         'status',
+        'class',
+        'seat_number',
     ];
 
     /**
